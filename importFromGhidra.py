@@ -1,16 +1,5 @@
-# By submitting this assignment, I agree to the following:
-#   "Aggies do not lie, cheat, or steal, or tolerate those who do."
-#   "I have not given or received any unauthorized aid on this assignment."
-#
-# Name:         Cory Overgaard
-# Section:      545
-# Team:         N/A
-# Assignment:   THE ASSIGNMENT NUMBER (e.g. Lab 1b-2)
-# Date:         DAY MONTH YEAR
-#
 import psutil
-import ghidra.framework.Application
-import ghidra.app.script.GhidraScript
+import pyhidra
 
 def is_ghidra_running():
     # Get a list of all running processes
