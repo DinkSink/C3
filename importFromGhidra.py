@@ -1,5 +1,8 @@
 import psutil
 import pyhidra
+import ghidra.app.script.GhidraScript
+import ghidra.program.model.data.StringDataType as StringDataType
+import exceptions
 
 def is_ghidra_running():
     # Get a list of all running processes
@@ -15,12 +18,3 @@ if is_ghidra_running():
     print("Ghidra is running.")
 else:
     print("Ghidra is not running.")
-
-
-def main():
-    print("Starting threads")
-    print("Started the threads")
-    print("All threads joined")
-
-
-main()
