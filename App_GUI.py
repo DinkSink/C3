@@ -1,7 +1,8 @@
 import PySimpleGUI as sg
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-
+import sys
+import json
 # Function to create a matplotlib figure and return it
 def draw_figure(canvas, figure):
     figure_canvas_agg = FigureCanvasTkAgg(figure, canvas)
@@ -23,7 +24,10 @@ layout = [
     [sg.Button('Script 1'), sg.Button('Potentially Encrypted Text'), sg.Button('Script 3'), sg.Button('Script 4')],
     [sg.Canvas(key='-CANVAS-')]
 ]
+with open("./strings_output.json", "r") as file:
+    json_data = json.load(file)
 
+print(json_data)
 # Create the Window
 window = sg.Window('Ghidra RE Data Analytics', layout, finalize=True)
 

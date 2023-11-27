@@ -1,5 +1,7 @@
 # Example Ghidra script to extract and print strings from memory
 
+import json
+import subprocess
 # Get the current program
 currentProgram = getCurrentProgram()
 
@@ -7,22 +9,33 @@ currentProgram = getCurrentProgram()
 listing = currentProgram.getListing()
 
 # Define the output file path
-output_file_path = "./strings_output.txt"
+output_file_path = "./strings_output.json"
+
+# Create a list to store string information
+strings_list = []
+
+# Iterate through data and add potential strings with their locations to the list
+for data in listing.getDefinedData(True):
+    string_value = data.getValue()
+    data_location = data.getAddress()
+    strings_list.append({"location": str(data_location), "value": str(string_value)})
+
+# Iterate through instructions and add mnemonics to the list
+instructions_list = []
+for instruction in listing.getInstructions(True):
+    mnemonic = instruction.getMnemonicString()
+    instructions_list.append({"mnemonic": mnemonic})
+
+# Create a dictionary to store the final JSON structure
+json_data = {"strings": strings_list, "instructions": instructions_list}
 
 # Open the output file for writing
 with open(output_file_path, 'w') as output_file:
-    # Iterate through data and print potential strings with their locations
-    for data in listing.getDefinedData(True):
-        string_value = data.getValue()
-        data_location = data.getAddress()
-        output_line = "Potential String at {}: {}".format(data_location, string_value)
-        print(output_line)
-        output_file.write(output_line + '\n')
-
-    # Iterate through instructions and print mnemonics
-    for instruction in listing.getInstructions(True):
-        mnemonic = instruction.getMnemonicString()
-        # print("Mnemonic:", mnemonic)
+    # Write the JSON data to the file
+    json.dump(json_data, output_file, indent=2)
 
 # Print a message indicating the file has been written
+print("JSON file has been written to:", output_file_path)
 
+script_path = "./App_GUI.py"
+subprocess.call(["python", script_path])
