@@ -28,6 +28,12 @@ def find_ip_addresses_and_urls(json_data):
 
     return ip_addresses, urls
 
+def filter_out_compiler(json_data):
+    newList = []
+    for item in json_data["strings"]:
+        if not re.search(r"_Z", item["value"]) and not re.search(r"gxx", item["value"]) and not re.search(r"GLIBC", item["value"]) and not re.search(r"CXX", item["value"]) and not re.search(r"GCC", item["value"]) and not (item["value"] == "None") and not re.search(r"align", item["value"]):
+            newList.append({"location": item["location"], "value": item["value"]})
+    return newList
 
 def load_json():
     global json_loaded
@@ -52,7 +58,26 @@ def show_frame(frame):
 
 def create_page1(parent):
     frame = ttk.Frame(parent)
-    ttk.Label(frame, text='This is page 1').pack()
+    columns = ('location', 'string')
+    table = ttk.Treeview(frame, columns=columns, show='headings')
+    table.heading('location', text='Location in Memory')
+    table.heading('string', text='String')
+
+    # Define column width and alignment
+    table.column('location', width=100, anchor='center')
+    table.column('string', width=200, anchor='center')
+
+
+    ttk.Label(frame, text='Deletes all of the strings are compiler defined').pack(pady=10)
+    if json_loaded:
+        strings = filter_out_compiler(json_data)
+        for str in strings:
+            table.insert('', 'end', values=(str['location'], str['value']))
+    scrollbar = ttk.Scrollbar(frame, orient='vertical', command=table.yview)
+    table.configure(yscroll=scrollbar.set)
+    scrollbar.pack(side='right', fill='y')
+
+    table.pack(expand=True, fill='both')
     ttk.Button(frame, text='Back', command=lambda: show_frame(home_frame)).pack(side='bottom')
     return frame
 
@@ -120,7 +145,7 @@ def enable_navigation_buttons():
         frame.grid(row=0, column=0, sticky='nsew')
 
     # Create and place navigation buttons with commands to show respective frames
-    btn1 = ttk.Button(home_frame, text='Strings defined by programmer', width=30, command=partial(show_frame, page1))
+    btn1 = ttk.Button(home_frame, text='No Compiler Strings', width=30, command=partial(show_frame, page1))
     btn1.grid(row=1, column=0, sticky='nsew', padx=5, pady=5)
 
     btn2 = ttk.Button(home_frame, text='English words', width=30, command=partial(show_frame, page2))
