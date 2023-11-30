@@ -213,7 +213,7 @@ def create_page3(parent):
         windows_count = len(found_windows_commands)
         sizes = [linux_count, windows_count]
         labels = 'Linux', 'Windows'
-        colors = ['gold', 'lightcoral']
+        colors = ['darkorange', 'deepskyblue']
         fig, ax = plt.subplots(figsize=(5, 3))  # Smaller figure size
         ax.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%', startangle=140)
         ax.axis('equal')
