@@ -10079,7 +10079,27 @@
     {
       "location": "00106147", 
       "value": "Enter the flag: "
-    }, 
+    },
+    {
+      "location": "00106148",
+      "value": "127.0.0.1"
+    },
+    {
+      "location": "00106149",
+      "value": "https://totallynotmalicious.com/secretscripts/malware.ps1"
+    },
+    {
+      "location": "00106150",
+      "value": "C:\\stuxnet.exe"
+    },
+    {
+      "location": "00106151",
+      "value": "/home/ransomwareoperator/.scripts/malicious"
+    },
+    {
+      "location": "00106147",
+      "value": "Enter the flag: "
+    },
     {
       "location": "00106158", 
       "value": "Flag is incorrect! Try again."
