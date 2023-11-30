@@ -6,6 +6,8 @@ from tkinter import messagebox
 from tkinter import filedialog
 import json
 import re
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 json_loaded = False
 page1, page2, page3, page4 = None, None, None, None
@@ -99,14 +101,16 @@ def create_page3(parent):
 def create_page4(parent):
     frame = ttk.Frame(parent)
 
-    # Create the Treeview widget
+    # Create a frame for the table
+    table_frame = ttk.Frame(frame)
+    table_frame.pack(side='top', fill='both', expand=True)
+
+    # Create the Treeview widget for the table
     columns = ('location', 'string', 'type')
-    table = ttk.Treeview(frame, columns=columns, show='headings')
+    table = ttk.Treeview(table_frame, columns=columns, show='headings')
     table.heading('location', text='Location in Memory')
     table.heading('string', text='String')
     table.heading('type', text='Type')
-
-    # Define column width and alignment
     table.column('location', width=100, anchor='center')
     table.column('string', width=200, anchor='center')
     table.column('type', width=100, anchor='center')
@@ -119,15 +123,37 @@ def create_page4(parent):
         for url in urls:
             table.insert('', 'end', values=(url['location'], url['value'], 'URL'))
 
-    # Add a scrollbar
-    scrollbar = ttk.Scrollbar(frame, orient='vertical', command=table.yview)
+    # Add a scrollbar to the table
+    scrollbar = ttk.Scrollbar(table_frame, orient='vertical', command=table.yview)
     table.configure(yscroll=scrollbar.set)
     scrollbar.pack(side='right', fill='y')
-
     table.pack(expand=True, fill='both')
 
-    ttk.Button(frame, text='Back', command=lambda: show_frame(home_frame)).pack(side='bottom')
+    # Create a frame for the pie chart
+    chart_frame = ttk.Frame(frame)
+    chart_frame.pack(side='top', fill='both', expand=True)
+
+    # Create a pie chart
+    if json_loaded:
+        ip_count = len(ip_addresses)
+        url_count = len(urls)
+        sizes = [ip_count, url_count]
+        labels = 'IP Addresses', 'URLs'
+        colors = ['gold', 'lightcoral']
+        fig, ax = plt.subplots(figsize=(5, 3))  # Smaller figure size
+        ax.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%', startangle=140)
+        ax.axis('equal')
+        chart = FigureCanvasTkAgg(fig, master=chart_frame)
+        chart_widget = chart.get_tk_widget()
+        chart_widget.pack(side='top', fill='both', expand=True)
+
+    # Create a frame for the Back button
+    button_frame = ttk.Frame(frame)
+    button_frame.pack(side='bottom', fill='x')
+    ttk.Button(button_frame, text='Back', command=lambda: show_frame(home_frame)).pack(side='right', padx=10, pady=10)
+
     return frame
+
 
 
 
