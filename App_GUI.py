@@ -30,6 +30,19 @@ def find_ip_addresses_and_urls(json_data):
 
     return ip_addresses, urls
 
+def find_encoded_strings_and_hex(json_data):
+    encoded_regex = r"^(0x|0X)?[a-fA-F0-9]+$"
+
+    encoded_strings = []
+
+    for item in json_data["strings"]:
+        value = item["value"]
+        location = item["location"]
+        if re.match(encoded_regex, value):
+            encoded_strings.append({"location": location, "value": value})
+
+    return encoded_strings
+
 def filter_out_compiler(json_data):
     newList = []
     for item in json_data["strings"]:
@@ -273,19 +286,47 @@ def create_page4(parent):
     return frame
 
 
+def create_page5(parent):
+    frame = ttk.Frame(parent)
+
+    # Create the Treeview widget for the table
+    columns = ('address', 'string', 'classification')
+    table = ttk.Treeview(frame, columns=columns, show='headings')
+    table.heading('address', text='Address')
+    table.heading('string', text='String')
+    table.heading('classification', text='Classification')
+    table.column('address', width=100, anchor='center')
+    table.column('string', width=200, anchor='center')
+    table.column('classification', width=100, anchor='center')
+
+    # Insert data into the table
+    if json_loaded:
+        encoded_strings = find_encoded_strings_and_hex(json_data)
+        for item in encoded_strings:
+            table.insert('', 'end', values=(item['location'], item['value'], 'Encoded String/Hex'))
+
+    # Add a scrollbar to the table
+    scrollbar = ttk.Scrollbar(frame, orient='vertical', command=table.yview)
+    table.configure(yscroll=scrollbar.set)
+    scrollbar.pack(side='right', fill='y')
+    table.pack(expand=True, fill='both')
+
+    ttk.Button(frame, text='Back', command=lambda: show_frame(home_frame)).pack(side='bottom')
+    return frame
 
 
 def enable_navigation_buttons():
-    global page1, page2, page3, page4
+    global page1, page2, page3, page4, page5
 
     # Create pages and assign them to global variables
     page1 = create_page1(app)
     page2 = create_page2(app)
     page3 = create_page3(app)
     page4 = create_page4(app)
+    page5 = create_page5(app)
 
     # Configure layout for each page
-    for frame in [page1, page2, page3, page4]:
+    for frame in [page1, page2, page3, page4, page5]:
         frame.grid(row=0, column=0, sticky='nsew')
 
     # Create and place navigation buttons with commands to show respective frames
@@ -300,6 +341,9 @@ def enable_navigation_buttons():
 
     btn4 = ttk.Button(home_frame, text='Network Access', width=30, command=partial(show_frame, page4))
     btn4.grid(row=2, column=1, sticky='nsew', padx=5, pady=5)
+
+    btn5 = ttk.Button(home_frame, text='Encoded and Hex Strings', width=30, command=partial(show_frame, page5))
+    btn5.grid(row=2, column=2, sticky='nsew', padx=5, pady=5)
 
     # Configure grid row and column sizes in the home frame
     for i in range(1, 3):
