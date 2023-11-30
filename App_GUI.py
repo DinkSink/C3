@@ -83,6 +83,21 @@ def load_json():
         except Exception as e:
             messagebox.showerror("Error", f"Failed to load JSON file: {e}")
 
+def find_english_words(json_data):
+    strings = []
+    with open("./English.txt", 'r') as file:
+        for line in file:
+            strings.append(line.strip())
+            
+    found_words = []
+
+    for item in json_data:
+        for s in strings:
+            if s in item["value"]:
+                found_words.append(item)
+                break
+    
+    return found_words
 
 def show_frame(frame):
     if not json_loaded and frame != home_frame:
@@ -119,7 +134,27 @@ def create_page1(parent):
 
 def create_page2(parent):
     frame = ttk.Frame(parent)
-    ttk.Label(frame, text='This is page 2').pack()
+    columns = ('location', 'string')
+    table = ttk.Treeview(frame, columns=columns, show='headings')
+    table.heading('location', text='Location in Memory')
+    table.heading('string', text='String')
+
+    # Define column width and alignment
+    table.column('location', width=100, anchor='center')
+    table.column('string', width=200, anchor='center')
+
+
+    ttk.Label(frame, text='Filters words out that are not common English words').pack(pady=10)
+    if json_loaded:
+        strings = filter_out_compiler(json_data)
+        stringsAgain = find_english_words(strings)
+        for str in stringsAgain:
+            table.insert('', 'end', values=(str['location'], str['value']))
+    scrollbar = ttk.Scrollbar(frame, orient='vertical', command=table.yview)
+    table.configure(yscroll=scrollbar.set)
+    scrollbar.pack(side='right', fill='y')
+
+    table.pack(expand=True, fill='both')
     ttk.Button(frame, text='Back', command=lambda: show_frame(home_frame)).pack(side='bottom')
     return frame
 
