@@ -162,6 +162,7 @@ ni
 nohup
 notify-send
 nslookup
+objdump
 open
 op
 passwd
