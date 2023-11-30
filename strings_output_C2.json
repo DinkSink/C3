@@ -10084,9 +10084,169 @@
       "location": "00106148",
       "value": "127.0.0.1"
     },
+        {
+        "location": "3152056",
+        "value": "151.172.225.11"
+    },
+    {
+        "location": "7784911",
+        "value": "170.23.243.126"
+    },
+    {
+        "location": "8828440",
+        "value": "96.219.127.238"
+    },
+    {
+        "location": "8943126",
+        "value": "167.237.202.45"
+    },
+    {
+        "location": "3209651",
+        "value": "238.137.236.245"
+    },
+    {
+        "location": "3004129",
+        "value": "86.56.83.103"
+    },
+    {
+        "location": "7363182",
+        "value": "113.144.140.46"
+    },
+    {
+        "location": "6326226",
+        "value": "120.49.82.107"
+    },
+    {
+        "location": "6362628",
+        "value": "9.246.23.107"
+    },
+    {
+        "location": "5179253",
+        "value": "248.180.234.1"
+    },
+    {
+        "location": "3148083",
+        "value": "10.172.35.223"
+    },
+    {
+        "location": "2485317",
+        "value": "54.185.212.139"
+    },
+    {
+        "location": "5909527",
+        "value": "92.250.109.84"
+    },
+    {
+        "location": "7474992",
+        "value": "209.187.49.92"
+    },
+    {
+        "location": "1878231",
+        "value": "4.223.197.104"
+    },
+    {
+        "location": "1790345",
+        "value": "95.23.113.230"
+    },
+    {
+        "location": "2086247",
+        "value": "129.171.227.99"
+    },
+    {
+        "location": "6480690",
+        "value": "108.49.167.67"
+    },
+    {
+        "location": "8324262",
+        "value": "138.154.196.76"
+    },
+    {
+        "location": "4134900",
+        "value": "70.42.206.184"
+    },
     {
       "location": "00106149",
       "value": "https://totallynotmalicious.com/secretscripts/malware.ps1"
+    },
+    {
+        "location": "2814868",
+        "value": "https://totallynotmalicious16.com/secretscripts/malware36.ps1"
+    },
+    {
+        "location": "1751058",
+        "value": "https://totallynotmalicious92.com/secretscripts/malware47.ps1"
+    },
+    {
+        "location": "5175134",
+        "value": "https://totallynotmalicious50.com/secretscripts/malware19.ps1"
+    },
+    {
+        "location": "6003749",
+        "value": "https://totallynotmalicious21.com/secretscripts/malware16.ps1"
+    },
+    {
+        "location": "8964408",
+        "value": "https://totallynotmalicious40.com/secretscripts/malware36.ps1"
+    },
+    {
+        "location": "4486271",
+        "value": "https://totallynotmalicious3.com/secretscripts/malware36.ps1"
+    },
+    {
+        "location": "8596020",
+        "value": "https://totallynotmalicious80.com/secretscripts/malware46.ps1"
+    },
+    {
+        "location": "7763439",
+        "value": "https://totallynotmalicious1.com/secretscripts/malware17.ps1"
+    },
+    {
+        "location": "2539185",
+        "value": "https://totallynotmalicious51.com/secretscripts/malware22.ps1"
+    },
+    {
+        "location": "5568263",
+        "value": "https://totallynotmalicious71.com/secretscripts/malware45.ps1"
+    },
+    {
+        "location": "4471700",
+        "value": "https://totallynotmalicious65.com/secretscripts/malware43.ps1"
+    },
+    {
+        "location": "3806038",
+        "value": "https://totallynotmalicious70.com/secretscripts/malware11.ps1"
+    },
+    {
+        "location": "3104773",
+        "value": "https://totallynotmalicious56.com/secretscripts/malware48.ps1"
+    },
+    {
+        "location": "9953454",
+        "value": "https://totallynotmalicious39.com/secretscripts/malware4.ps1"
+    },
+    {
+        "location": "1730074",
+        "value": "https://totallynotmalicious15.com/secretscripts/malware2.ps1"
+    },
+    {
+        "location": "7643929",
+        "value": "https://totallynotmalicious68.com/secretscripts/malware1.ps1"
+    },
+    {
+        "location": "3535468",
+        "value": "https://totallynotmalicious40.com/secretscripts/malware45.ps1"
+    },
+    {
+        "location": "7009008",
+        "value": "https://totallynotmalicious38.com/secretscripts/malware25.ps1"
+    },
+    {
+        "location": "3501703",
+        "value": "https://totallynotmalicious82.com/secretscripts/malware5.ps1"
+    },
+    {
+        "location": "7543392",
+        "value": "https://totallynotmalicious28.com/secretscripts/malware6.ps1"
     },
     {
       "location": "00106150",
