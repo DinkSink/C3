@@ -21,7 +21,7 @@ def find_ip_addresses_and_urls(file_path):
 
     return ip_addresses, urls
 
-file_path = "./strings_output.json"
+file_path = "./strings_output_C2.json"
 ip_addresses, urls = find_ip_addresses_and_urls(file_path)
 print(ip_addresses)
 print(urls)
