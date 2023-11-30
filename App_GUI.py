@@ -10,6 +10,7 @@ import re
 json_loaded = False
 page1, page2, page3, page4 = None, None, None, None
 
+
 def find_ip_addresses_and_urls(json_data):
     ip_regex = r"^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
     url_regex = r"(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-])"
@@ -27,6 +28,7 @@ def find_ip_addresses_and_urls(json_data):
 
     return ip_addresses, urls
 
+
 def load_json():
     global json_loaded
     global json_data
@@ -40,11 +42,13 @@ def load_json():
         except Exception as e:
             messagebox.showerror("Error", f"Failed to load JSON file: {e}")
 
+
 def show_frame(frame):
     if not json_loaded and frame != home_frame:
         messagebox.showwarning("Warning", "Please load your strings file")
         return
     frame.tkraise()
+
 
 def create_page1(parent):
     frame = ttk.Frame(parent)
@@ -52,11 +56,13 @@ def create_page1(parent):
     ttk.Button(frame, text='Back', command=lambda: show_frame(home_frame)).pack(side='bottom')
     return frame
 
+
 def create_page2(parent):
     frame = ttk.Frame(parent)
     ttk.Label(frame, text='This is page 2').pack()
     ttk.Button(frame, text='Back', command=lambda: show_frame(home_frame)).pack(side='bottom')
     return frame
+
 
 def create_page3(parent):
     frame = ttk.Frame(parent)
@@ -64,21 +70,41 @@ def create_page3(parent):
     ttk.Button(frame, text='Back', command=lambda: show_frame(home_frame)).pack(side='bottom')
     return frame
 
+
 def create_page4(parent):
     frame = ttk.Frame(parent)
-    ttk.Label(frame, text='IP Addresses and URLs').pack(pady=10)
-    results_text = tk.Text(frame, height=20, width=80)
-    results_text.pack()
+
+    # Create the Treeview widget
+    columns = ('location', 'string', 'type')
+    table = ttk.Treeview(frame, columns=columns, show='headings')
+    table.heading('location', text='Location in Memory')
+    table.heading('string', text='String')
+    table.heading('type', text='Type')
+
+    # Define column width and alignment
+    table.column('location', width=100, anchor='center')
+    table.column('string', width=200, anchor='center')
+    table.column('type', width=100, anchor='center')
+
+    # Insert data into the table
     if json_loaded:
         ip_addresses, urls = find_ip_addresses_and_urls(json_data)
-        results_text.insert('end', "IP Addresses:\n")
         for ip in ip_addresses:
-            results_text.insert('end', f"{ip['location']}: {ip['value']}\n")
-        results_text.insert('end', "\nURLs:\n")
+            table.insert('', 'end', values=(ip['location'], ip['value'], 'IP Address'))
         for url in urls:
-            results_text.insert('end', f"{url['location']}: {url['value']}\n")
+            table.insert('', 'end', values=(url['location'], url['value'], 'URL'))
+
+    # Add a scrollbar
+    scrollbar = ttk.Scrollbar(frame, orient='vertical', command=table.yview)
+    table.configure(yscroll=scrollbar.set)
+    scrollbar.pack(side='right', fill='y')
+
+    table.pack(expand=True, fill='both')
+
     ttk.Button(frame, text='Back', command=lambda: show_frame(home_frame)).pack(side='bottom')
     return frame
+
+
 
 def enable_navigation_buttons():
     global page1, page2, page3, page4
@@ -114,12 +140,14 @@ def enable_navigation_buttons():
     # Ensure the home frame is shown after setting up the buttons
     show_frame(home_frame)
 
+
 def create_home_frame(parent):
     frame = ttk.Frame(parent)
     load_button = ttk.Button(frame, text='Load JSON File', width=20, command=load_json)
     load_button.grid(row=0, column=0, columnspan=2, sticky='nsew', padx=5, pady=5)
     frame.grid_rowconfigure(0, weight=1, minsize=50)
     return frame
+
 
 app = ttkb.Window(themename='cyborg')
 app.geometry('800x1000')
