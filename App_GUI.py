@@ -37,6 +37,39 @@ def filter_out_compiler(json_data):
             newList.append({"location": item["location"], "value": item["value"]})
     return newList
 
+def find_possible_console_commands(json_data):
+    linux_commands = []
+    windows_commands = []
+        
+    with open("./linuxDictionary.txt", "r") as linux_Dict:
+        for line in linux_Dict.readlines():
+            linux_commands.append(line.strip())
+        
+    with open("./windowsDictionary.txt", "r") as windows_Dict:
+        for line in windows_Dict.readlines():
+            windows_commands.append(line.strip())
+        
+    found_linux_commands = []
+    found_windows_commands = []
+
+    for elem in json_data["strings"]:
+        if re.search(r" \/[^\/\s]+(?:\/[^\/\s]+)+", elem["value"]):
+            found_linux_commands.append(elem)
+            continue
+        if re.search(r"[a-zA-Z]:\\(?:[^\\\/\s]+\\)*[^\\\/\s]+\.(exe|bat|cmd|ps1)", elem["value"]):
+            found_windows_commands.append(elem)
+            continue
+        for line in linux_commands:
+            if ((line + " ") in elem["value"]):
+                found_linux_commands.append(elem)
+                break
+        for line in windows_commands:
+            if ((line + " ") in elem["value"]):
+                found_windows_commands.append(elem)
+                break
+    
+    return found_linux_commands, found_windows_commands
+
 def load_json():
     global json_loaded
     global json_data
@@ -93,8 +126,58 @@ def create_page2(parent):
 
 def create_page3(parent):
     frame = ttk.Frame(parent)
-    ttk.Label(frame, text='This is page 3').pack()
-    ttk.Button(frame, text='Back', command=lambda: show_frame(home_frame)).pack(side='bottom')
+
+    # Create a frame for the table
+    table_frame = ttk.Frame(frame)
+    table_frame.pack(side='top', fill='both', expand=True)
+
+    # Create the Treeview widget for the table
+    columns = ('location', 'string', 'type')
+    table = ttk.Treeview(table_frame, columns=columns, show='headings')
+    table.heading('location', text='Location in Memory')
+    table.heading('string', text='String')
+    table.heading('type', text='Type')
+    table.column('location', width=100, anchor='center')
+    table.column('string', width=200, anchor='center')
+    table.column('type', width=100, anchor='center')
+
+    # Insert data into the table
+    if json_loaded:
+        found_linux_commands, found_windows_commands = find_possible_console_commands(json_data)
+        for elem in found_linux_commands:
+            table.insert('', 'end', values=(elem['location'], elem['value'], "linux"))
+        for elem in found_windows_commands:
+            table.insert('', 'end', values=(elem['location'], elem['value'], "windows"))
+
+    # Add a scrollbar to the table
+    scrollbar = ttk.Scrollbar(table_frame, orient='vertical', command=table.yview)
+    table.configure(yscroll=scrollbar.set)
+    scrollbar.pack(side='right', fill='y')
+    table.pack(expand=True, fill='both')
+
+    # Create a frame for the pie chart
+    chart_frame = ttk.Frame(frame)
+    chart_frame.pack(side='top', fill='both', expand=True)
+
+    # Create a pie chart
+    if json_loaded:
+        linux_count = len(found_linux_commands)
+        windows_count = len(found_windows_commands)
+        sizes = [linux_count, windows_count]
+        labels = 'Linux', 'Windows'
+        colors = ['gold', 'lightcoral']
+        fig, ax = plt.subplots(figsize=(5, 3))  # Smaller figure size
+        ax.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%', startangle=140)
+        ax.axis('equal')
+        chart = FigureCanvasTkAgg(fig, master=chart_frame)
+        chart_widget = chart.get_tk_widget()
+        chart_widget.pack(side='top', fill='both', expand=True)
+
+    # Create a frame for the Back button
+    button_frame = ttk.Frame(frame)
+    button_frame.pack(side='bottom', fill='x')
+    ttk.Button(button_frame, text='Back', command=lambda: show_frame(home_frame)).pack(side='right', padx=10, pady=10)
+
     return frame
 
 
